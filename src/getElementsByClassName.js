@@ -11,25 +11,32 @@
 //edge: n/a
 
 
-var getElementsByClassName = function(className
-) {
+var getElementsByClassName = function(className, element) {
   var results = [];
   var element = element || document.body;
-
+  var child = element.children;
+  
+  console.log("Element", element);
+  console.log("Child node here", element.childNodes);
   //if there are no more children nodes, return results
 
-  if (!element.childNodes.length) {
-    return results;
-  }
+  if (element.classList.contains(className)) {
+    results.push(element);
+  }   
 
   //else recursive call (getElementsByClassName) on current element
+  if (child.length) {
+    for (var i = 0; i < child.length; i++) {
+      console.log("In the loop:", child[i]);
 
-  //look at an element
-  if (element.className === className) {
-    results.push(element);
-    return getElementsByClassName();
+      results = results.concat(getElementsByClassName(className, child[i]));
+
+      console.log(results);
     
      //if it matches class name
        //push the element to the array  
-  }  
+       
+    }
+  } 
+  return results;
 };
