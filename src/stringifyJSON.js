@@ -9,34 +9,44 @@
 //edge:
 
 var stringifyJSON = function(obj) {
-  var arr;
+  var output = '';
 
   //if obj is array
-  if (typeof obj != 'function') {
-    arr = [];
-    if (Array.isArray(obj)) {
-      for (var i = 0; i < obj.length; i++) {
-        arr = arr.concat(stringifyJSON(arr[i]));
-        console.log('array', arr);
+  if (typeof obj === 'function') {
+    output = '{}';
+  } else if (Array.isArray(obj)) {
+    output = '[';
+    for (var i = 0; i < obj.length; i++) {
+      output += stringifyJSON(obj[i]) + ',';
+      //console.log('array', output);
+    }
+    if (!obj.length) {
+      output += ']';
+    } else {
+      output = output.slice(0, -1) + ']';
+    }
+    
+    //console.log('slice', output);
+      
+  } else if (typeof obj === 'object' && obj !== null) {
+    for (var key in obj) {
+      if (typeof obj[key] !== 'function' && obj[key] !== undefined) {
+        output += stringifyJSON(key) + ':' + stringifyJSON(obj[key]) + ',';
       }
       
-    } else if (typeof obj === 'object') {
-      for (var key in obj) {
-        arr = arr.concat(stringifyJSON(obj.key));
-        console.log('object', arr);
-      }
-  
-    } else {
-      if (typeof obj === 'string') { 
-        return '"' + obj + '"';
-      } else {
-        var primitive = '';
-        primitive += obj;
-        return primative;
-        console.log('primative', arr);
-      }
-
+      //console.log('object', arr);
     }
+    output = '{' + output.slice(0, -1) + '}';
+  } else {
+    if (typeof obj === 'string') {
+      return '"' + obj + '"'; 
+    }
+    return obj + '';
+
   }
-  return arr;
+
+  
+  
+  return output;
 };
+
